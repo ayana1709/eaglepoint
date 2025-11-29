@@ -25,6 +25,6 @@ def smart_text_analyzer(text):
         "longest_words": longest_words,
         "word_frequency": word_frequency
     }
-text_input = "Hello world! This is a text analyzer test. Analyzer analyzes texts!"
+text_input = "The quick brown fox jumps over the lazy dog the fox"
 result = smart_text_analyzer(text_input)
 print(result)
