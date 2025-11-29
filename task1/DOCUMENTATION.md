@@ -21,3 +21,29 @@ alternatives i used from them
 -->Manually counting characters inside a loop
 --->Using dictionary only for frequency
 --->Splitting without cleaning punctuation
+
+step three --Step-by-step solution process
+
+First, I made all the text lowercase and removed punctuation using regex. This ensures that the analysis treats words like “Hello” and “hello” the same, and ignores symbols that could interfere with counting. I committed this as feat: implement normalize_text function.
+
+Next, I split the cleaned text into words, counted the total number of words, and calculated the average word length. This gives a quick overview of the text’s structure. I committed this as feat: add analyze_text function.
+
+After that, I focused on the longest words and word frequency. I found all words with the maximum length, removed duplicates using set(), sorted them for clarity, and used Counter to count how often each word appears. This approach is simpler and faster than manual loops. I committed this as refactor: reorganize tests for analyze_text function and improve documentation.
+
+Finally, I combined everything into a single, clean function called smart_text_analyzer. I tested it with text containing punctuation, mixed case, empty input, and multiple longest words. I committed this as feat: implement smart_text_analyzer function to analyze and process input text.
+
+Problem faced: At first, using str.replace() missed some punctuation symbols, empty input caused division by zero when calculating the average word length, and duplicates appeared in the longest words list. I fixed these by switching to regex, adding a guard for empty input, and using set() + sorted() for the longest words.
+
+step four --- Why My Solution Is Best
+
+Cleans text accurately using regex
+
+Case-insensitive and consistent processing
+
+Uses Counter for fast word-frequency counting
+
+Efficient longest-word detection with no duplicates
+
+Handles empty input safely (no errors)
+
+Lightweight and optimized — runs in O(n) time
