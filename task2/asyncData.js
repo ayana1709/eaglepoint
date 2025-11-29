@@ -1,12 +1,12 @@
-// Step 3: Sleep helper function
+// Helper function
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// Step 3: Mock API function (unchanged)
+// Mock API function to work with network request
 async function mockFetch(url) {
   return new Promise((resolve, reject) => {
-    const success = Math.random() > 0.3; // 70% success rate
+    const success = Math.random() > 0.3;
     setTimeout(() => {
       if (success) resolve({ data: `Fetched data from ${url}` });
       else reject(new Error("Network error"));
@@ -14,7 +14,13 @@ async function mockFetch(url) {
   });
 }
 
-// Step 3: Fetch with retry logic
+/**
+ * Fetch data with retry logic
+ * @param {string} url
+ * @param {number} maxRetries
+ * @returns {Promise<Object>}
+ * @throws {Error}
+ */
 async function fetchWithRetry(url, maxRetries = 3) {
   let attempt = 0;
 
@@ -22,16 +28,29 @@ async function fetchWithRetry(url, maxRetries = 3) {
     try {
       console.log(`Attempt ${attempt + 1} to fetch ${url}`);
       const result = await mockFetch(url);
-      return result; // Success
+      return result;
     } catch (error) {
       attempt++;
       console.warn(`Attempt ${attempt} failed: ${error.message}`);
+
       if (attempt === maxRetries) {
+        // All retries exhausted, throw final error
         throw new Error(
           `Failed to fetch data from ${url} after ${maxRetries} attempts`
         );
       }
-      await sleep(1000); // Wait 1 second before retrying
+
+      await sleep(1000);
     }
   }
 }
+(async () => {
+  const testUrl = "https://jsonplaceholder.typicode.com/todos";
+
+  try {
+    const data = await fetchWithRetry(testUrl, 5);
+    console.log("Success:", data);
+  } catch (error) {
+    console.error("Final Error:", error.message);
+  }
+})();
