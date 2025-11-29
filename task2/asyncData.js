@@ -6,4 +6,7 @@ async function mockFetch(url) {
       else reject(new Error("Network error"));
     }, 300);
   });
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 }
