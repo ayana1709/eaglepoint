@@ -1,38 +1,30 @@
-from collections import Counter
-from typing import Dict, Any
+import pytest
+from analyzer import analyze_text
 
-def analyze_text(text: str) -> Dict[str, Any]:
-    """
-    Analyze text and return:
-      - word_count
-      - average_word_length (2 decimals)
-      - longest_words (list)
-      - word_frequency (dict)
-    """
-    clean = normalize_text(text)
-    words = clean.split()
-    word_count = len(words)
+def test_given_example():
+    inp = "The quick brown fox jumps over the lazy dog the fox"
+    res = analyze_text(inp)
+    assert res["word_count"] == 10
+    assert res["average_word_length"] == 3.7
+    assert set(res["longest_words"]) == {"quick", "brown", "jumps"}
+    assert res["word_frequency"]["the"] == 2
+    assert res["word_frequency"]["fox"] == 2
 
-    if word_count == 0:
-        return {
-            "word_count": 0,
-            "average_word_length": 0.0,
-            "longest_words": [],
-            "word_frequency": {}
-        }
+def test_empty_input():
+    res = analyze_text("")
+    assert res["word_count"] == 0
+    assert res["average_word_length"] == 0.0
+    assert res["longest_words"] == []
+    assert res["word_frequency"] == {}
 
-    total_chars = sum(len(w) for w in words)
-    avg_len = round(total_chars / word_count, 2)
+def test_punctuation_and_case():
+    inp = "Hello!!! HeLLo, HELLO."
+    res = analyze_text(inp)
+    assert res["word_count"] == 3
+    assert res["word_frequency"]["hello"] == 3
 
-    max_len = max(len(w) for w in words)
-    # use a set to avoid duplicates, then sort for consistent output
-    longest_words = sorted({w for w in words if len(w) == max_len})
-
-    freq = dict(Counter(words))
-
-    return {
-        "word_count": word_count,
-        "average_word_length": avg_len,
-        "longest_words": longest_words,
-        "word_frequency": freq
-    }
+def test_ties_for_longest():
+    inp = "one three seven twelve"
+    res = analyze_text(inp)
+    # 'twelve' (6) and 'three'(5) -> only 'twelve' is longest
+    assert res["longest_words"] == ["twelve"]
