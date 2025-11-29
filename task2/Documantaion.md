@@ -1,4 +1,4 @@
-{{# Task 2 —› Async Data Fetcher with Retry
+# Task 2 —› Async Data Fetcher with Retry
 
 ---
 
@@ -124,6 +124,3 @@ async function fetchWithRetry(url, maxRetries = 3) {
 - Clear console logging for each attempt
 - Lightweight — no external libraries
 - Works reliably with a mock API simulating random failures
-
-✨ Clean, readable, and totally Ayana-approved 💡
-}}
